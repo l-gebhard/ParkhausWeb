@@ -14,7 +14,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Users/lars/Downloads/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/lars/Downloads/javax.json-api-1.0.jar" sourcepath="lib/javax.json-api-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Marcel/Desktop/javax.json-1.0.jar/javax.json-1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
