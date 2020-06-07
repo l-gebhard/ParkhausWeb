@@ -38,7 +38,7 @@ public class ParkhausServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println( f.format(sum / 100) + " Euro");
-		System.out.println( "sum = " + f.format(sum / 100) + " €");
+		System.out.println( "Sum = " + f.format(sum / 100) + " Euro");
 		}
 		if ( "cmd".equals( command ) && "avg".equals( param ) ){
 			Float sum = getPersistentSum();
@@ -66,20 +66,20 @@ public class ParkhausServlet extends HttpServlet {
 		
 		if ( "cmd".equals( command ) && "chart".equals( param )){
 			Car c = (Car) getApplication().getAttribute("Carlist");
-			response.setContentType("text/html");
+			response.setContentType("text/plain");
 			PrintWriter out = response.getWriter();
 			
-			JsonObject root = Json.createObjectBuilder()
-				.add( "data" , Json.createArrayBuilder()
-						.add( Json.createObjectBuilder()
-								.add("x",c.size())
-								.add("type", "bar")
-								.add("name","Auslastung")
-						)
-						
-						
-					).build();
-			out.println(root.toString());
+			 String json = "{\n" + " \"data\": [\n" + " {\n" + " \"x\": [\n" + "\"" + 0 + "\"";
+			 for(int i = 1; i < 10; i++) {
+			 json += ",\n" + "\"" + i + "\"";
+			 }
+			 json += "\n],\n\"y\":[\n" + "\"" + 99 + "\"";
+			 for(int i = 1; i < 10; i++) {
+			 json += ",\n" + "\"" + i  + "\"";
+			 }
+			 json += "\n],\n\"type\":\"bar\"\n}\n]\n}";
+			 out.println(json);
+			System.out.println(json);
 		}
 		
 		
