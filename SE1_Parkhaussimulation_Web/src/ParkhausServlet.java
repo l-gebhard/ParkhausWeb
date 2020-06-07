@@ -28,8 +28,8 @@ public class ParkhausServlet extends HttpServlet {
 		String param = requestParamString[1];
 		DecimalFormat f = new DecimalFormat("#0.00");
 		DecimalFormat f2 = new DecimalFormat("#0.000");
-		System.out.println( "a = " + command );
-		System.out.println( "ebj = " + param );
+		System.out.println( "Command = " + command );
+		System.out.println( "Param = " + param );
 
 		
 		if ( "cmd".equals( command ) && "sum".equals( param ) ){
