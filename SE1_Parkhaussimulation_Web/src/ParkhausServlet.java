@@ -28,63 +28,73 @@ public class ParkhausServlet extends HttpServlet {
 		String param = requestParamString[1];
 		DecimalFormat f = new DecimalFormat("#0.00");
 		DecimalFormat f2 = new DecimalFormat("#0.000");
-		System.out.println( "Command = " + command );
-		System.out.println( "Param = " + param );
-
-		
-		if ( "cmd".equals( command ) && "sum".equals( param ) ){
-		Float sum = getPersistentSum();
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		out.println( f.format(sum / 100) + " Euro");
-		System.out.println( "Sum = " + f.format(sum / 100) + " Euro");
-		}
-		if ( "cmd".equals( command ) && "avg".equals( param ) ){
-			Float sum = getPersistentSum();
-			Integer anzahl = getPersistentAnzahl();
-			Float gesamtdauer = getPersistentGesamtDauer();
-			Float avg = sum / anzahl;
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println( f.format(avg / 100) + " Euro " + "Durchschnittsdauer: " + f2.format((gesamtdauer / anzahl)/100) + " Sekunden");
-			System.out.println( "anz = " + anzahl );
-			System.out.println( "avg = " + f.format(anzahl / 100) + " € " + "Durchschnittsdauer : " + f2.format((gesamtdauer / anzahl)/100) + " Sekunden");
+		
+		Parkhaus p = getPersistentParkhaus();
+		
+		System.out.println( "Command = " + command );
+		System.out.println( "Param = " + param );
+
+		if("cmd".equals(command)) {
+			
+			switch(param) {
+				
+			case("sum"):{
+				out.println( f.format(p.getSumme() / 100) + " Euro");
+				System.out.println( "Sum = " + f.format(p.getSumme() / 100) + " Euro");
+				break;
+			}
+			
+			case("avg"):{
+				Float avg = p.getSumme() / (p.getGesamtBesucher()-p.getCurrentBesucher());
+				out.println( f.format(avg / 100) + " Euro " + "Durchschnittsdauer: " + f2.format((p.getGesamtDauer() / (p.getGesamtBesucher() - p.getCurrentBesucher() )/1000))+ " Sekunden");
+				System.out.println( "avg = " + f.format(avg / 100) + " Euro" + "Durchschnittsdauer : " + f2.format((p.getGesamtDauer() / (p.getGesamtBesucher() - p.getCurrentBesucher()) /1000)) + " Sekunden");
+				break;
+			}
+			
+			case("Besucheranzahl"):{
+				out.println(p.getGesamtBesucher() + " Besucher");
+				System.out.println(p.getGesamtBesucher() + " Besucher");
+				break;
+				
+			}
+			
+			case("chart"):{
+				response.setContentType("text/plain");
+				out = response.getWriter();
+				
+				Car c = (Car) getApplication().getAttribute("Carlist");
+				
+				 String json = "{" + " \"data\": [" + " {" + " \"x\": [" + "\"" + 0 + "\"";
+				 json += "," + "\"" + 1 + "\"";
+				 json += "],\"y\":[" + "\"" + 9 + "\"";
+				 json += "],\"type\":\"bar\"}]}";
+				 System.out.println();
+				 out.println(json);
+				System.out.println(json);
+				
+				
+				//TODO
+				break;
+				
+			}
+			
+			case("familyChart"):{
+				response.setContentType("text/plain");
+				out = response.getWriter();
+				
+				//TODO
+				break;
+			}
+			
+			default: System.out.println("Fehler parameter kann nicht verarbeitet werden GetMethode");
+			
+			}
+			
 			
 		}
-		
-		if ( "cmd".equals( command ) && "Besucheranzahl".equals( param ) ){
-			Integer anzahl = getPersistentAnzahl();
-			
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println(anzahl + " Besucher");
-			System.out.println( anzahl + " Besucher");
-		}
-		
-		
-		
-		if ( "cmd".equals( command ) && "chart".equals( param )){
-			Car c = (Car) getApplication().getAttribute("Carlist");
-			response.setContentType("text/plain");
-			PrintWriter out = response.getWriter();
-			
-			 String json = "{\n" + " \"data\": [\n" + " {\n" + " \"x\": [\n" + "\"" + 0 + "\"";
-			 for(int i = 1; i < 10; i++) {
-			 json += ",\n" + "\"" + i + "\"";
-			 }
-			 json += "\n],\n\"y\":[\n" + "\"" + 99 + "\"";
-			 for(int i = 1; i < 10; i++) {
-			 json += ",\n" + "\"" + i  + "\"";
-			 }
-			 json += "\n],\n\"type\":\"bar\"\n}\n]\n}";
-			 out.println(json);
-			System.out.println(json);
-		}
-		
-		
-		
-		
 	}
 
 	
@@ -93,51 +103,35 @@ public class ParkhausServlet extends HttpServlet {
 		System.out.println( body );
 		String[] params = body.split(",");
 		String event = params[0];
-		if("enter".equals(event)) {
-			if(getApplication().getAttribute("Carlist")== null) {
-				Car c = new Car();
-				c.add(params[1]);
-				getApplication().setAttribute("Carlist", c);
-			}
-			else {
-				Car c = (Car) getApplication().getAttribute("Carlist");
-				c.add(params[1]);
-				getApplication().setAttribute("Carlist",c);
-			}
+		Parkhaus p = getPersistentParkhaus();
+		
+		switch(event){
 			
+		case("enter"):{
+			p.add(new Car(params[1], params[8]));
+			break;
 		}
-		
-		
-		if("leave".equals(event)) {
 			
-			Float sum = getPersistentSum();
-			Float gesamtdauer = getPersistentGesamtDauer();
+		case("leave"):{
 			String priceString = params[4];
 			float dauer = Float.parseFloat(params[3]);
-			Integer anzahl = getPersistentAnzahl();
+			p.remove(params[1]);
 			
-			Car c = (Car) getApplication().getAttribute("Carlist");
-			c.remove(params[1]);
-			getApplication().setAttribute("Carlist",c);
-			
-			if ( ! "_".equals( priceString ) ){
-				// parse the number in string
-				float price = Float.parseFloat( priceString );
-				sum += price;
-				gesamtdauer += dauer;
+			if(! "_".equals(priceString)) {
+				float price = Float.parseFloat(priceString);
+				p.setSumme(p.getSumme() + price);
+				p.setGesamtDauer(p.getGesamtDauer() + dauer);
 				
-				// store sum persistently in ServletContext
-				getApplication().setAttribute("sum", sum );
-				getApplication().setAttribute("anzahl", ++anzahl );
-				getApplication().setAttribute("gesamtdauer" ,gesamtdauer);
 			}
-			
-			
-			
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println( sum ); // return sum in HTTP response, if needed
+			break;
 		}
+		
+		default: System.out.println("Event im Post nicht gefunden");
+		
+		
+		}
+		
+		setPersistentParkhaus(p);
 		
 		
 	}
@@ -169,44 +163,18 @@ public class ParkhausServlet extends HttpServlet {
 		return getServletConfig().getServletContext();
 		}
 	
-	private Float getPersistentSum(){
-		Float sum;
+	private Parkhaus getPersistentParkhaus(){
 		ServletContext application = getApplication();
-		sum = (Float)application.getAttribute("sum");
-		if ( sum == null ) {
-			sum = 0.0f;
+		Parkhaus p = (Parkhaus)application.getAttribute("Parkhaus");
+		if(p == null) {
+			p = new Parkhaus(0);
 		}
-		return sum;
-		}
-	
-	private Integer getPersistentAnzahl(){
-		Integer anzahl;
-		ServletContext application = getApplication();
-		anzahl = (Integer)application.getAttribute("anzahl");
-		if ( anzahl == null ) {
-			anzahl = 0;
-		}
-		return anzahl;
+		return p;
 		}
 	
-	private Float getPersistentGesamtDauer(){
-		Float gesamtDauer;
+	private void setPersistentParkhaus(Parkhaus p){
 		ServletContext application = getApplication();
-		gesamtDauer = (Float)application.getAttribute("sum");
-		if ( gesamtDauer == null ) {
-			gesamtDauer = 0.0f;
+		application.setAttribute("Parkhaus", p);
+
 		}
-		return gesamtDauer;
-		
-	}
-	
-	private Car getPersistentCarList() {
-		ServletContext application = getApplication();
-		return (Car) application.getAttribute("Carlist");
-	}
-	
-	private void setPersistentCarList(Car c) {
-		ServletContext application = getApplication();
-		application.setAttribute("Carlist", c);
-	}
 }

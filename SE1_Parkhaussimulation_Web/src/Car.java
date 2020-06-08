@@ -1,34 +1,24 @@
-import java.util.ArrayList;
-
 public class Car implements CarIF{
 	
-	ArrayList<String> c = new ArrayList<>();
+	String id;
+	String art;
 	
-
-	
-	@Override
-	public ArrayList<String> cars() {
-		return c;
+	public Car(String id, String art) {
+		this.id = id;
+		this.art = art;
 		
 	}
 
-	@Override
-	public void add(String c) {
-		this.c.add(c);
-		
-	}
 
 	@Override
-	public void remove(String c) {
-		this.c.remove(c);
-		
+	public String getArt() {
+		return art;
 	}
+
 
 	@Override
-	public int size() {
-		return c.size();
+	public String getID() {
+		return id;
 	}
-
-	
 	
 }
