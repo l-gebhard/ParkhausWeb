@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class Parkhaus implements ParkhausIF{
 	
@@ -9,10 +12,13 @@ public class Parkhaus implements ParkhausIF{
 	private int currentBehinderte;
 	private int currentBesucher;
 	private int gesamtBesucher;
-	private float summe;
-	private float gesamtDauer;
+	private int gesamtFrauen;
+	private int gesamtAny;
+	private int gesamtFamilie;
+	private int gesamtBehinderte;
 	
-	
+	private ArrayList<Double> parkdauerList = new ArrayList<>();
+	private ArrayList<Double> einnahmen = new ArrayList<>();
 	private ArrayList<Car> carlist = new ArrayList<>();
 	
 	
@@ -27,10 +33,25 @@ public class Parkhaus implements ParkhausIF{
 		currentBesucher++;
 		
 		switch(c.getArt()){
-		case "Frau": currentFrauen++; break;
-		case "any": currentAny++; break;
-		case "Familie": currentFamilie++; break;
-		case "Behinderte": currentBehinderte++; break;
+		case "Frau": {
+			currentFrauen++;
+			gesamtFrauen++;
+			break;
+		}
+		case "any": {
+			currentAny++;
+			gesamtAny++;
+			break;
+		}
+		case "Familie": {
+			currentFamilie++;
+			gesamtFamilie++;
+			break;
+		}
+		case "Behinderte": 
+			currentBehinderte++; 
+			gesamtBehinderte++;
+			break;
 		default: System.out.println("Fehler car add");
 		}
 	}
@@ -76,6 +97,55 @@ public class Parkhaus implements ParkhausIF{
 	}
 	
 	@Override
+	public int[] getGesamtBesucherArray() {
+		int[] s = new int [4];
+		s[0] = gesamtFrauen;
+		s[1] = gesamtAny;
+		s[2] = gesamtBehinderte;
+		s[3] = gesamtFamilie;
+		return s;
+	}
+	
+	@Override
+	public DoubleStream getEinnahmeStream() {
+		double[] array = new double[einnahmen.size()];
+		
+		for(int i = 0; i < einnahmen.size(); i++) {
+			array[i] = einnahmen.get(i);
+		}
+		
+		return Arrays.stream(array);
+		
+	}
+	
+	@Override
+	public void addEinnahme(double x) {
+		einnahmen.add(x);
+		
+	}
+	
+	@Override
+	public DoubleStream getParkdauerStream() {
+		double[] array = new double[parkdauerList.size()];
+		
+		for(int i = 0; i < parkdauerList.size(); i++) {
+			array[i] = parkdauerList.get(i);
+		}
+		
+		return Arrays.stream(array);
+		
+	}
+	
+	@Override
+	public void addParkdauer(double f) {
+		parkdauerList.add(f);
+		
+	}
+	
+	
+	
+	
+	@Override
 	public int size() {
 		return carlist.size();
 	}
@@ -104,25 +174,26 @@ public class Parkhaus implements ParkhausIF{
 		return gesamtBesucher;
 	}
 
-	public float getSumme() {
-		return summe;
-	}
-
-	public void setSumme(float summe) {
-		this.summe = summe;
-	}
-
-	public float getGesamtDauer() {
-		return gesamtDauer;
-	}
-
-	public void setGesamtDauer(float gesamtDauer) {
-		this.gesamtDauer = gesamtDauer;
-	}
-
 	public int getCurrentBesucher() {
 		return currentBesucher;
 	}
+
+	public int getGesamtFamilie() {
+		return gesamtFamilie;
+	}
+
+	public int getGesamtFrauen() {
+		return gesamtFrauen;
+	}
+
+	public int getGesamtAny() {
+		return gesamtAny;
+	}
+
+	public int getGesamtBehinderte() {
+		return gesamtBehinderte;
+	}
+
 
 
 	

@@ -4,6 +4,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.OptionalDouble;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import javax.json.*;
 
 import javax.servlet.ServletContext;
@@ -41,16 +48,18 @@ public class ParkhausServlet extends HttpServlet {
 			
 			switch(param) {
 				
-			case("sum"):{
-				out.println( f.format(p.getSumme() / 100) + " Euro");
-				System.out.println( "Sum = " + f.format(p.getSumme() / 100) + " Euro");
+			case("Gesamteinnahmen"):{
+				out.println("Gesamteinnahmen: " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
+				System.out.println( "Gesamteinnahmen = " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
 				break;
 			}
 			
 			case("avg"):{
-				Float avg = p.getSumme() / (p.getGesamtBesucher()-p.getCurrentBesucher());
-				out.println( f.format(avg / 100) + " Euro " + "Durchschnittsdauer: " + f2.format((p.getGesamtDauer() / (p.getGesamtBesucher() - p.getCurrentBesucher() )/1000))+ " Sekunden");
-				System.out.println( "avg = " + f.format(avg / 100) + " Euro" + "Durchschnittsdauer : " + f2.format((p.getGesamtDauer() / (p.getGesamtBesucher() - p.getCurrentBesucher()) /1000)) + " Sekunden");
+				double avg = p.getEinnahmeStream().average().orElse(0.0d);
+				double avgParkdauer = p.getParkdauerStream().average().orElse(0.0d);
+				
+				out.println("Durchschnittspreis: " + f.format(avg / 100) + " Euro | " + "Durchschnittsdauer: " + f2.format(avgParkdauer / 1000) + " Sekunden");
+				System.out.println( "Durchschnittspreis: " + f.format(avg / 100) + " Euro | " + "Durchschnittsdauer: " + f2.format(avgParkdauer /1000) + " Sekunden");
 				break;
 			}
 			
@@ -60,23 +69,20 @@ public class ParkhausServlet extends HttpServlet {
 				break;
 				
 			}
+			case("min"):{
+				double minEinnahme = p.getEinnahmeStream().min().orElse(0);
+				double minParkdauer = p.getParkdauerStream().min().orElse(0);
+				out.println("Min Parkgebuehr: " + f.format(minEinnahme / 100) + " Euro bei " + f2.format(minParkdauer / 1000) +  " Sekunden Parkdauer");
+				System.out.println("Min Parkgebuehr: " + f.format(minEinnahme / 100) + " Euro bei " + f2.format(minParkdauer / 1000) +  " Sekunden Parkdauer");
+				break;
+				
+			}
 			
-			case("chart"):{
-				response.setContentType("text/plain");
-				out = response.getWriter();
-				
-				Car c = (Car) getApplication().getAttribute("Carlist");
-				
-				 String json = "{" + " \"data\": [" + " {" + " \"x\": [" + "\"" + 0 + "\"";
-				 json += "," + "\"" + 1 + "\"";
-				 json += "],\"y\":[" + "\"" + 9 + "\"";
-				 json += "],\"type\":\"bar\"}]}";
-				 System.out.println();
-				 out.println(json);
-				System.out.println(json);
-				
-				
-				//TODO
+			case("max"):{
+				double maxEinnahme = p.getEinnahmeStream().max().orElse(0);
+				double maxParkdauer = p.getParkdauerStream().max().orElse(0);
+				out.println("max Parkgebuehr: " + f.format(maxEinnahme / 100) + " Euro bei " + f2.format(maxParkdauer / 1000) +  " Sekunden Parkdauer");
+				System.out.println("max Parkgebuehr: " + f.format(maxEinnahme / 100) + " Euro bei " + f2.format(maxParkdauer / 1000) +  " Sekunden Parkdauer");
 				break;
 				
 			}
@@ -84,8 +90,15 @@ public class ParkhausServlet extends HttpServlet {
 			case("familyChart"):{
 				response.setContentType("text/plain");
 				out = response.getWriter();
-				
-				//TODO
+				 int[] besuchergesamt = p.getGesamtBesucherArray();
+				 
+				 String json = "{" + " \"data\": ";
+				 json += "[" + " {" + " \"values\": ["  + besuchergesamt[0] + "," + besuchergesamt[1] + "," + besuchergesamt[2] + ","+ besuchergesamt[3];
+				 json += "],\"labels\":[" + "\"" + "Frauen\"" + "," + "\"Any\"" + "," + "\"Behinderte\"" + ","+ "\"Familien\""  + "],";
+				 json += "\"type\":\"pie\"}]}";
+				 out.println(json);			 
+				 System.out.println(json);
+				 
 				break;
 			}
 			
@@ -119,8 +132,8 @@ public class ParkhausServlet extends HttpServlet {
 			
 			if(! "_".equals(priceString)) {
 				float price = Float.parseFloat(priceString);
-				p.setSumme(p.getSumme() + price);
-				p.setGesamtDauer(p.getGesamtDauer() + dauer);
+				p.addEinnahme(price);
+				p.addParkdauer(dauer);
 				
 			}
 			break;

@@ -1,3 +1,4 @@
+import java.util.stream.DoubleStream;
 
 public interface ParkhausIF {
 		
@@ -5,6 +6,11 @@ public interface ParkhausIF {
 		void add(Car c);
 		void remove(String ID);
 		int size();
+		int[] getGesamtBesucherArray();
+		DoubleStream getEinnahmeStream();
+		void addEinnahme(double f);
 		
+	    DoubleStream getParkdauerStream();
+	    void addParkdauer(double f);
 
 }
