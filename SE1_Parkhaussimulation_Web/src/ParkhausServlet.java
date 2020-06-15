@@ -87,6 +87,14 @@ public class ParkhausServlet extends HttpServlet {
 				
 			}
 			
+			case("chart"):{
+				JsonObject root = Json.createObjectBuilder().build();
+				
+				out.println("chart");
+				System.out.println("chart");
+				break;
+			}
+			
 			case("familyChart"):{
 				response.setContentType("text/plain");
 				out = response.getWriter();

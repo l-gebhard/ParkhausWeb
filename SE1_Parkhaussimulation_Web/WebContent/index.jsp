@@ -15,7 +15,7 @@
 					license_max = "30"
 					client_categories = '["any","Familie","Frau", "Behinderte"]'
 					extra_buttons =  '["Gesamteinnahmen","avg","Besucheranzahl", "min", "max"]'
-					extra_charts = '["familyChart"]'
+					extra_charts = '["chart", "familyChart"]'
 ></ccm-parkhaus-9-0-0>
 </body>
 
