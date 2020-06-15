@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 
-import javax.json.*;
+import org.json.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -81,7 +81,11 @@ public class ParkhausServlet extends HttpServlet {
 			}
 			
 			case("chart"):{
-				JsonObject root = Json.createObjectBuilder().build();
+				//TODO
+				JSONObject jo = new JSONObject();
+				jo.put("name", "jon doe");
+				jo.put("age", "22");
+				jo.put("city", "chicago");
 				
 				out.println("chart");
 				System.out.println("chart");
