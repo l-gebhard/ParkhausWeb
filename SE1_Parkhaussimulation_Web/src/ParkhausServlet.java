@@ -4,12 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.OptionalDouble;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import javax.json.*;
 
@@ -19,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 @WebServlet("/Parkhaus")
 public class ParkhausServlet extends HttpServlet {
