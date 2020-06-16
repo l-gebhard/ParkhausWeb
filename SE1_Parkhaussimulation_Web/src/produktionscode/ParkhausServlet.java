@@ -1,3 +1,4 @@
+package produktionscode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,26 +82,59 @@ public class ParkhausServlet extends HttpServlet {
 				
 			}
 			
-			case("chart"):{
-				//TODO
-				JsonObject root = Json.createObjectBuilder().build();
+			case("Einnahmen_pro_Kategorie"):{
+				
+				 JsonObject root = Json.createObjectBuilder()
+						 .add("data", Json.createArrayBuilder()
+								 .add(Json.createObjectBuilder()
+										 .add("x", Json.createArrayBuilder()
+												 .add("Frauen")
+												 .add("Any")
+												 .add("Behinderte")
+												 .add("Familien")
+												 )
+										 .add("y", Json.createArrayBuilder()
+												 .add(p.getEinnahmenFrauen() / 100)
+												 .add(p.getEinnahmenAny() / 100)
+												 .add(p.getEinnahmenBehinderte() / 100)
+												 .add(p.getEinnahmenFamilie() / 100)
+												 )
+										 .add("type", "bar")
+										 .add("name", "Einnahmen pro Kategorie")
+										 )
+						).build();
 				
 				out.println(root);
 				System.out.println(root);
 				break;
 			}
 			
-			case("familyChart"):{
+			case("Anteil_Besucher"):{
 				response.setContentType("text/plain");
 				out = response.getWriter();
 				 int[] besuchergesamt = p.getGesamtBesucherArray();
 				 
-				 String json = "{" + " \"data\": ";
-				 json += "[" + " {" + " \"values\": ["  + besuchergesamt[0] + "," + besuchergesamt[1] + "," + besuchergesamt[2] + ","+ besuchergesamt[3];
-				 json += "],\"labels\":[" + "\"" + "Frauen\"" + "," + "\"Any\"" + "," + "\"Behinderte\"" + ","+ "\"Familien\""  + "],";
-				 json += "\"type\":\"pie\"}]}";
-				 out.println(json);			 
-				 System.out.println(json);
+				 JsonObject root = Json.createObjectBuilder()
+						 .add("data", Json.createArrayBuilder()
+								 .add(Json.createObjectBuilder()
+										 .add("values", Json.createArrayBuilder()
+												 .add(besuchergesamt[0])
+												 .add(besuchergesamt[1])
+												 .add(besuchergesamt[2])
+												 .add(besuchergesamt[3])
+												 )
+										 .add("labels", Json.createArrayBuilder()
+												 .add("Frauen")
+												 .add("Any")
+												 .add("Behinderte")
+												 .add("Familien")
+												 )
+										 .add("type", "pie")
+								)
+						).build();
+				 
+				 out.println(root);			 
+				 System.out.println(root);
 				 
 				break;
 			}
@@ -135,7 +169,7 @@ public class ParkhausServlet extends HttpServlet {
 			
 			if(! "_".equals(priceString)) {
 				float price = Float.parseFloat(priceString);
-				p.addEinnahme(price);
+				p.addEinnahme(price, params[8]);
 				p.addParkdauer(dauer);
 				
 			}

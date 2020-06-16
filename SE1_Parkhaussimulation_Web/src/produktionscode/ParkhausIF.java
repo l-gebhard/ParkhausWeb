@@ -1,3 +1,4 @@
+package produktionscode;
 import java.util.stream.DoubleStream;
 
 public interface ParkhausIF {
@@ -8,7 +9,7 @@ public interface ParkhausIF {
 		int size();
 		int[] getGesamtBesucherArray();
 		DoubleStream getEinnahmeStream();
-		void addEinnahme(double f);
+		void addEinnahme(double f, String art);
 		
 	    DoubleStream getParkdauerStream();
 	    void addParkdauer(double f);

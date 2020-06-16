@@ -1,3 +1,4 @@
+package produktionscode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
@@ -11,11 +12,17 @@ public class Parkhaus implements ParkhausIF{
 	private int currentFamilie;
 	private int currentBehinderte;
 	private int currentBesucher;
+	
 	private int gesamtBesucher;
 	private int gesamtFrauen;
 	private int gesamtAny;
 	private int gesamtFamilie;
 	private int gesamtBehinderte;
+	
+	private double einnahmenFrauen;
+	private double einnahmenAny;
+	private double einnahmenFamilie;
+	private double einnahmenBehinderte;
 	
 	private ArrayList<Double> parkdauerList = new ArrayList<>();
 	private ArrayList<Double> einnahmen = new ArrayList<>();
@@ -98,7 +105,7 @@ public class Parkhaus implements ParkhausIF{
 	
 	@Override
 	public int[] getGesamtBesucherArray() {
-		int[] s = new int [4];
+		int[] s = new int[4];
 		s[0] = gesamtFrauen;
 		s[1] = gesamtAny;
 		s[2] = gesamtBehinderte;
@@ -119,8 +126,18 @@ public class Parkhaus implements ParkhausIF{
 	}
 	
 	@Override
-	public void addEinnahme(double x) {
+	public void addEinnahme(double x, String art) {
 		einnahmen.add(x);
+		
+		switch(art) {
+		case "Frau": einnahmenFrauen += x; break;
+		case "any" : einnahmenAny += x; break;
+		case "Behinderte": einnahmenBehinderte += x; break;
+		case "Familie": einnahmenFamilie += x; break;
+		
+		default: System.out.println("Fehler Parkhaus.addEinnahme() Art nicht gefunden");
+		
+		}
 		
 	}
 	
@@ -192,6 +209,22 @@ public class Parkhaus implements ParkhausIF{
 
 	public int getGesamtBehinderte() {
 		return gesamtBehinderte;
+	}
+
+	public double getEinnahmenBehinderte() {
+		return einnahmenBehinderte;
+	}
+
+	public double getEinnahmenFamilie() {
+		return einnahmenFamilie;
+	}
+
+	public double getEinnahmenFrauen() {
+		return einnahmenFrauen;
+	}
+
+	public double getEinnahmenAny() {
+		return einnahmenAny;
 	}
 
 
