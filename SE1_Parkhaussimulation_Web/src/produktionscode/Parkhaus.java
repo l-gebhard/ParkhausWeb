@@ -1,8 +1,9 @@
 package produktionscode;
-import java.util.ArrayList;
+
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 public class Parkhaus implements ParkhausIF{
 	
@@ -24,13 +25,17 @@ public class Parkhaus implements ParkhausIF{
 	private double einnahmenFamilie;
 	private double einnahmenBehinderte;
 	
-	private ArrayList<Double> parkdauerList = new ArrayList<>();
-	private ArrayList<Double> einnahmen = new ArrayList<>();
-	private ArrayList<Car> carlist = new ArrayList<>();
+	private List<Double> parkdauerList;
+	private List<Double> einnahmen;
+	private List<Car> carlist;
 	
 	
-	public Parkhaus(int id) {
+	public Parkhaus(int id, List<Double> parkdauerliste, List<Double> einnahmen, List<Car>carlist) {
 		this.id = id;	
+		this.parkdauerList = parkdauerliste;
+		this.einnahmen = einnahmen;
+		this.carlist = carlist;
+		
 	}
 	
 	@Override
@@ -67,10 +72,15 @@ public class Parkhaus implements ParkhausIF{
 	public void remove(String id) {
 		
 		Car c = null;
-		for(int i = 0; i < carlist.size(); i++) {
-			if(carlist.get(i).getID().equals(id)) {
-				 c = carlist.get(i);
-			} 
+		Iterator<Car> it = carlist.iterator();
+		
+		while(it.hasNext()) {
+			Car tmp = it.next();
+			if(tmp.getID().equals(id)) {
+				c = tmp;
+				break;
+				
+			}
 			
 		}
 
@@ -95,9 +105,12 @@ public class Parkhaus implements ParkhausIF{
 	@Override
 	public Car[] cars() {
 		Car[] carray = new Car[carlist.size()];
+		int pointer = 0;
 		
-		for(int i = 0; i < carlist.size(); i++) {
-			carray[i] = carlist.get(i);
+		Iterator<Car> it = carlist.iterator();
+		
+		while(it.hasNext()) {
+			carray[pointer++] = it.next();		
 		}
 		
 		return carray;
@@ -116,9 +129,12 @@ public class Parkhaus implements ParkhausIF{
 	@Override
 	public DoubleStream getEinnahmeStream() {
 		double[] array = new double[einnahmen.size()];
+		int pointer = 0;
 		
-		for(int i = 0; i < einnahmen.size(); i++) {
-			array[i] = einnahmen.get(i);
+		Iterator<Double> it = einnahmen.iterator();
+		
+		while(it.hasNext()) {
+			array[pointer++] = it.next();		
 		}
 		
 		return Arrays.stream(array);
@@ -144,11 +160,13 @@ public class Parkhaus implements ParkhausIF{
 	@Override
 	public DoubleStream getParkdauerStream() {
 		double[] array = new double[parkdauerList.size()];
+		int pointer = 0;
 		
-		for(int i = 0; i < parkdauerList.size(); i++) {
-			array[i] = parkdauerList.get(i);
+		Iterator<Double> it = parkdauerList.iterator();
+		
+		while(it.hasNext()) {
+			array[pointer++] = it.next();	
 		}
-		
 		return Arrays.stream(array);
 		
 	}

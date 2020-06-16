@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -113,6 +115,13 @@ public class ParkhausServlet extends HttpServlet {
 				response.setContentType("text/plain");
 				out = response.getWriter();
 				 int[] besuchergesamt = p.getGesamtBesucherArray();
+				 Integer[] besucherIntegerArray = Arrays.stream(besuchergesamt)
+							.boxed()
+							.toArray(Integer[]::new);
+				 
+				 ArrayIterator<Integer> it = new ArrayIterator<Integer>(besucherIntegerArray);
+				 
+				 
 				 
 				 JsonObject root = Json.createObjectBuilder()
 						 .add("data", Json.createArrayBuilder()
@@ -217,7 +226,7 @@ public class ParkhausServlet extends HttpServlet {
 		ServletContext application = getApplication();
 		Parkhaus p = (Parkhaus)application.getAttribute("Parkhaus");
 		if(p == null) {
-			p = new Parkhaus(0);
+			p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>());
 		}
 		return p;
 		}

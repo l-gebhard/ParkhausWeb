@@ -2,6 +2,8 @@ package testcode;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 
@@ -18,7 +20,7 @@ class ParkhausServletTest {
 	
 	@BeforeEach
 	void setup() {
-		p = new Parkhaus(0);
+		p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>());
 	}
 	
 	@Test
