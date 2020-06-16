@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -5,8 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 
-import org.json.*;
-
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -82,13 +83,10 @@ public class ParkhausServlet extends HttpServlet {
 			
 			case("chart"):{
 				//TODO
-				JSONObject jo = new JSONObject();
-				jo.put("name", "jon doe");
-				jo.put("age", "22");
-				jo.put("city", "chicago");
+				JsonObject root = Json.createObjectBuilder().build();
 				
-				out.println("chart");
-				System.out.println("chart");
+				out.println(root);
+				System.out.println(root);
 				break;
 			}
 			
