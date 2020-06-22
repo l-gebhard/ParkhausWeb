@@ -40,16 +40,22 @@ public class ParkhausServlet extends HttpServlet {
 		
 		System.out.println( "Command = " + command );
 		System.out.println( "Param = " + param );
-
+		
 		if("cmd".equals(command)) {
 			
 			switch(param) {
 				
 			case("Gesamteinnahmen"):{
+				
+				
+			}
+			/*
+			case("Gesamteinnahmen"):{
 				out.println("Gesamteinnahmen: " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
 				System.out.println( "Gesamteinnahmen = " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
 				break;
 			}
+			*/
 			
 			case("avg"):{
 				double avg = p.getEinnahmeStream().average().orElse(0.0d);
@@ -115,13 +121,6 @@ public class ParkhausServlet extends HttpServlet {
 				response.setContentType("text/plain");
 				out = response.getWriter();
 				 int[] besuchergesamt = p.getGesamtBesucherArray();
-				 Integer[] besucherIntegerArray = Arrays.stream(besuchergesamt)
-							.boxed()
-							.toArray(Integer[]::new);
-				 
-				 ArrayIterator<Integer> it = new ArrayIterator<Integer>(besucherIntegerArray);
-				 
-				 
 				 
 				 JsonObject root = Json.createObjectBuilder()
 						 .add("data", Json.createArrayBuilder()

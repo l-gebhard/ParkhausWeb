@@ -5,11 +5,12 @@ public interface ParkhausIF {
 		
 		Car[] cars();
 		void add(Car c);
-		void remove(String ID);
+		Car remove(String ID);
 		int size();
 		int[] getGesamtBesucherArray();
-		DoubleStream getEinnahmeStream();
 		void addEinnahme(double f, String art);
+		DoubleStream getEinnahmeStream();
+		
 		
 	    DoubleStream getParkdauerStream();
 	    void addParkdauer(double f);

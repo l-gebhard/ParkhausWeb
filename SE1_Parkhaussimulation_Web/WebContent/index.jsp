@@ -6,17 +6,17 @@
 <title>Parkhaus Gruppe 11</title>
 
 
-<script src='https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-9.0.0.js'></script>
+<script src='https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-9.1.2.js'></script>
 
 
 </head>
 <body>
-<ccm-parkhaus-9-0-0 server_url = "http://localhost:8080/SE1_Parkhaussimulation_Web/Parkhaus"
+<ccm-parkhaus-9-1-2 server_url = "http://localhost:8080/SE1_Parkhaussimulation_Web/Parkhaus"
 					license_max = "30"
 					client_categories = '["any","Familie","Frau", "Behinderte"]'
-					extra_buttons =  '["Gesamteinnahmen","avg","Besucheranzahl", "min", "max"]'
+					extra_buttons =  '["ChangeView", Gesamteinnahmen","avg","Besucheranzahl", "min", "max"]'
 					extra_charts = '["Einnahmen_pro_Kategorie", "Anteil_Besucher"]'
-></ccm-parkhaus-9-0-0>
+></ccm-parkhaus-9-1-2>
 </body>
 
 </html>

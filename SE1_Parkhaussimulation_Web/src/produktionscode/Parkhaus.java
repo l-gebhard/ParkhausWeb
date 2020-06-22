@@ -69,7 +69,7 @@ public class Parkhaus implements ParkhausIF{
 	}
 
 	@Override
-	public void remove(String id) {
+	public Car remove(String id) {
 		
 		Car c = null;
 		Iterator<Car> it = carlist.iterator();
@@ -99,6 +99,8 @@ public class Parkhaus implements ParkhausIF{
 			
 			System.out.println("Auto nicht im Parkhaus vorhanden (Parkhaus.remove())");
 		}
+		
+		return c;
 		
 	}
 
@@ -244,6 +246,7 @@ public class Parkhaus implements ParkhausIF{
 	public double getEinnahmenAny() {
 		return einnahmenAny;
 	}
+
 
 
 
