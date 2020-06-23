@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,17 +46,13 @@ public class ParkhausServlet extends HttpServlet {
 			
 			switch(param) {
 				
-			case("Gesamteinnahmen"):{
-				
-				
-			}
-			/*
+			
 			case("Gesamteinnahmen"):{
 				out.println("Gesamteinnahmen: " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
 				System.out.println( "Gesamteinnahmen = " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
 				break;
 			}
-			*/
+			
 			
 			case("avg"):{
 				double avg = p.getEinnahmeStream().average().orElse(0.0d);
@@ -146,6 +143,16 @@ public class ParkhausServlet extends HttpServlet {
 				 
 				break;
 			}
+			
+			case("Kunden_Ansicht"):{
+				//response.sendRedirect("http://localhost:8080/SE1_Parkhaussimulation_Web/KundenView.jsp");
+				response.sendRedirect(request.getContextPath()+"/ManagerView.jsp");
+				
+				
+				System.out.println("Redirected to " + request.getContextPath()+"/ManagerView.jsp");
+				break;
+			}
+			
 			
 			default: System.out.println("Fehler parameter kann nicht verarbeitet werden GetMethode");
 			
