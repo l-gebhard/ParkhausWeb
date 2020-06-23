@@ -5,7 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
-public class Parkhaus implements ParkhausIF{
+public class Parkhaus extends AbstractPublisher implements ParkhausIF {
+	
+	List<Double> state; //[GesamtEinnahmen, AvgEinnahmen, AvGParkdauer, Besucheranzahl, MinEinnahmen, MinParkdauer, MaxEinnahmen, MaxParkdauer]
+	
+	
 	
 	private int id;
 	private int currentFrauen;
@@ -25,17 +29,28 @@ public class Parkhaus implements ParkhausIF{
 	private double einnahmenFamilie;
 	private double einnahmenBehinderte;
 	
+	private double gesamtEinnahmen;
+	private double einnahmenAvg;
+	private double einnahmenMin;
+	private double einnahmenMax;
+	
+	private double parkdauerAvg;
+	private double parkdauerMin;
+	private double parkdauerMax;
+	
+	
 	private List<Double> parkdauerList;
 	private List<Double> einnahmen;
 	private List<Car> carlist;
 	
 	
-	public Parkhaus(int id, List<Double> parkdauerliste, List<Double> einnahmen, List<Car>carlist) {
+	public Parkhaus(int id, List<Double> parkdauerliste, List<Double> einnahmen, List<Car>carlist, Double[] states) {
+		
 		this.id = id;	
 		this.parkdauerList = parkdauerliste;
 		this.einnahmen = einnahmen;
 		this.carlist = carlist;
-		
+		state = Arrays.asList(states);
 	}
 	
 	@Override
@@ -43,6 +58,8 @@ public class Parkhaus implements ParkhausIF{
 		carlist.add(c);
 		gesamtBesucher++;
 		currentBesucher++;
+		
+		this.setState(3, gesamtBesucher);
 		
 		switch(c.getArt()){
 		case "Frau": {
@@ -128,8 +145,26 @@ public class Parkhaus implements ParkhausIF{
 		return s;
 	}
 	
-	@Override
-	public DoubleStream getEinnahmeStream() {
+	
+	public double getGesamtEinnahmen() {
+		return gesamtEinnahmen / 100;
+		
+	}
+	
+	public double getEinnahmenAvg() {
+		return einnahmenAvg / 100;
+	}
+	
+	public double getEinnahmenMin() {
+		return einnahmenMin / 100;
+		
+	}
+	
+	public double getEinnahmenMax() {
+		return einnahmenMax / 100;
+	}
+	
+	private DoubleStream getEinnahmeStream() {
 		double[] array = new double[einnahmen.size()];
 		int pointer = 0;
 		
@@ -145,6 +180,8 @@ public class Parkhaus implements ParkhausIF{
 	
 	@Override
 	public void addEinnahme(double x, String art) {
+
+
 		einnahmen.add(x);
 		
 		switch(art) {
@@ -157,10 +194,22 @@ public class Parkhaus implements ParkhausIF{
 		
 		}
 		
+		gesamtEinnahmen = getEinnahmeStream().sum();
+		einnahmenAvg = getEinnahmeStream().average().orElse(0d);
+		
+		einnahmenMin = getEinnahmeStream().min().orElse(0d);
+		einnahmenMax = getEinnahmeStream().max().orElse(0d);
+		
+		
+		this.setState(0, gesamtEinnahmen);
+		this.setState(1, einnahmenAvg);
+		this.setState(4, einnahmenMin);
+		this.setState(6, einnahmenMax);
+		
 	}
 	
-	@Override
-	public DoubleStream getParkdauerStream() {
+	private DoubleStream getParkdauerStream() {
+
 		double[] array = new double[parkdauerList.size()];
 		int pointer = 0;
 		
@@ -173,13 +222,45 @@ public class Parkhaus implements ParkhausIF{
 		
 	}
 	
+	
+	public double getParkdauerAvg() {
+		return parkdauerAvg / 1000;
+		
+		
+	}
+	
+	public double getParkdauerMin() {
+		return parkdauerMin / 1000;
+	}
+	
+	public double getParkdauerMax() {
+		return parkdauerMax / 1000;
+	}
+	
 	@Override
 	public void addParkdauer(double f) {
+
 		parkdauerList.add(f);
+		parkdauerAvg = getParkdauerStream().average().orElse(0d);
+		parkdauerMin = getParkdauerStream().min().orElse(0d);
+		parkdauerMax = getParkdauerStream().max().orElse(0d);
+		
+		this.setState(2, parkdauerAvg);
+		this.setState(5, parkdauerMin);
+		this.setState(7, parkdauerMax);
 		
 	}
 	
 	
+	
+	List<Double> getState(){
+		return state;
+	}
+	
+	void setState(int index, double value) {
+		state.set(index, value);
+		update();
+	}
 	
 	
 	@Override

@@ -18,7 +18,9 @@ class ParkhausIFTest {
 	
 	@BeforeEach
 	void setup() {
-		p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>());
+		
+		Double[] states = new Double[8];
+		p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>(), states);
 		
 	}
 	
@@ -71,20 +73,21 @@ class ParkhausIFTest {
 	@Test
 	@DisplayName("Einnahme wird korrekt gespeichert")
 	void addEinnahmeTest() {
-		p.addEinnahme(10, "any");
+		p.addEinnahme(100, "any");
 		
-		assertEquals(1, p.getEinnahmeStream().count());
-		assertEquals(10, p.getEinnahmeStream().sum());
+		//Einnahme wird durch 100 geteilt wg. Euro
+		assertEquals(1, p.getGesamtEinnahmen());
 		
 	}
 	
 	@Test
 	@DisplayName("Parkdauer wird korrekt gespeichert")
 	void addParkdauerest() {
-		p.addParkdauer(10);
+		p.addParkdauer(1000);
 		
-		assertEquals(1, p.getParkdauerStream().count());
-		assertEquals(10, p.getParkdauerStream().sum());
+		//Parkdauer wird aufgrund von Sekunden durch 1000 geteilt
+		assertEquals(1, p.getParkdauerMin());
+		
 		
 	}
 	

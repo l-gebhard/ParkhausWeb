@@ -20,7 +20,10 @@ class ParkhausServletTest {
 	
 	@BeforeEach
 	void setup() {
-		p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>());
+		
+		Double[] states = new Double[7];
+		
+		p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>(), states);
 	}
 	
 	@Test

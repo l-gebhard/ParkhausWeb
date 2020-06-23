@@ -9,8 +9,17 @@ public interface ParkhausIF {
 		int size();
 		int[] getGesamtBesucherArray();
 		void addEinnahme(double f, String art);
-		DoubleStream getEinnahmeStream();
-	    DoubleStream getParkdauerStream();
+		
+		public double getGesamtEinnahmen();
+		public double getEinnahmenAvg();
+		public double getEinnahmenMax();
+		public double getEinnahmenMin();
+		
+		public double getParkdauerAvg();
+		public double getParkdauerMax();
+		public double getParkdauerMin();
+		
+		
 	    void addParkdauer(double f);
 
 }

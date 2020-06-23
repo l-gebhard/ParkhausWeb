@@ -1,17 +1,16 @@
 package produktionscode;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,15 +18,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 @WebServlet("/Parkhaus")
 public class ParkhausServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		
 		
+		System.out.println("request = " + request.toString());
+		System.out.println("response = " + response.toString());
 		String[] requestParamString = request.getQueryString().split("=");
 		String command = requestParamString[0];
 		String param = requestParamString[1];
@@ -48,18 +49,15 @@ public class ParkhausServlet extends HttpServlet {
 				
 			
 			case("Gesamteinnahmen"):{
-				out.println("Gesamteinnahmen: " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
-				System.out.println( "Gesamteinnahmen = " + f.format(p.getEinnahmeStream().sum() / 100) + " Euro");
+				out.println("Gesamteinnahmen: " + f.format(p.getGesamtEinnahmen()) + " Euro");
+				System.out.println( "Gesamteinnahmen = " + f.format(p.getGesamtEinnahmen()) + " Euro");
 				break;
 			}
 			
 			
 			case("avg"):{
-				double avg = p.getEinnahmeStream().average().orElse(0.0d);
-				double avgParkdauer = p.getParkdauerStream().average().orElse(0.0d);
-				
-				out.println("Durchschnittspreis: " + f.format(avg / 100) + " Euro | " + "Durchschnittsdauer: " + f2.format(avgParkdauer / 1000) + " Sekunden");
-				System.out.println( "Durchschnittspreis: " + f.format(avg / 100) + " Euro | " + "Durchschnittsdauer: " + f2.format(avgParkdauer /1000) + " Sekunden");
+				out.println("Durchschnittspreis: " + f.format(p.getEinnahmenAvg()) + " Euro | " + "Durchschnittsdauer: " + f2.format(p.getParkdauerAvg()) + " Sekunden");
+				System.out.println( "Durchschnittspreis: " + f.format(p.getEinnahmenAvg()) + " Euro | " + "Durchschnittsdauer: " + f2.format(p.getParkdauerAvg()) + " Sekunden");
 				break;
 			}
 			
@@ -70,19 +68,15 @@ public class ParkhausServlet extends HttpServlet {
 				
 			}
 			case("min"):{
-				double minEinnahme = p.getEinnahmeStream().min().orElse(0);
-				double minParkdauer = p.getParkdauerStream().min().orElse(0);
-				out.println("Min Parkgebuehr: " + f.format(minEinnahme / 100) + " Euro bei " + f2.format(minParkdauer / 1000) +  " Sekunden Parkdauer");
-				System.out.println("Min Parkgebuehr: " + f.format(minEinnahme / 100) + " Euro bei " + f2.format(minParkdauer / 1000) +  " Sekunden Parkdauer");
+				out.println("Min Parkgebuehr: " + f.format(p.getEinnahmenMin()) + " Euro bei " + f2.format(p.getParkdauerMin()) +  " Sekunden Parkdauer");
+				System.out.println("Min Parkgebuehr: " + f.format(p.getEinnahmenMin()) + " Euro bei " + f2.format(p.getParkdauerMin()) +  " Sekunden Parkdauer");
 				break;
 				
 			}
 			
 			case("max"):{
-				double maxEinnahme = p.getEinnahmeStream().max().orElse(0);
-				double maxParkdauer = p.getParkdauerStream().max().orElse(0);
-				out.println("max Parkgebuehr: " + f.format(maxEinnahme / 100) + " Euro bei " + f2.format(maxParkdauer / 1000) +  " Sekunden Parkdauer");
-				System.out.println("max Parkgebuehr: " + f.format(maxEinnahme / 100) + " Euro bei " + f2.format(maxParkdauer / 1000) +  " Sekunden Parkdauer");
+				out.println("max Parkgebuehr: " + f.format(p.getEinnahmenMax()) + " Euro bei " + f2.format(p.getParkdauerMax()) +  " Sekunden Parkdauer");
+				System.out.println("max Parkgebuehr: " + f.format(p.getEinnahmenMax()) + " Euro bei " + f2.format(p.getParkdauerMax()) +  " Sekunden Parkdauer");
 				break;
 				
 			}
@@ -142,23 +136,11 @@ public class ParkhausServlet extends HttpServlet {
 				 System.out.println(root);
 				 
 				break;
-			}
-			
-			case("Kunden_Ansicht"):{
-				//response.sendRedirect("http://localhost:8080/SE1_Parkhaussimulation_Web/KundenView.jsp");
-				response.sendRedirect(request.getContextPath()+"/ManagerView.jsp");
-				
-				
-				System.out.println("Redirected to " + request.getContextPath()+"/ManagerView.jsp");
-				break;
-			}
-			
+			}		
 			
 			default: System.out.println("Fehler parameter kann nicht verarbeitet werden GetMethode");
 			
 			}
-			
-			
 		}
 	}
 
@@ -186,7 +168,6 @@ public class ParkhausServlet extends HttpServlet {
 				float price = Float.parseFloat(priceString);
 				p.addEinnahme(price, params[8]);
 				p.addParkdauer(dauer);
-				
 			}
 			break;
 		}
@@ -232,7 +213,8 @@ public class ParkhausServlet extends HttpServlet {
 		ServletContext application = getApplication();
 		Parkhaus p = (Parkhaus)application.getAttribute("Parkhaus");
 		if(p == null) {
-			p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>());
+			Double[] states = new Double[8];
+			p = new Parkhaus(0, new ArrayList<Double>(), new ArrayList<Double>(), new ArrayList<Car>(), states );
 		}
 		return p;
 		}
