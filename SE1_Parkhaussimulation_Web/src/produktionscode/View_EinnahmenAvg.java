@@ -1,6 +1,6 @@
 package produktionscode;
 
-public class EinnahmenAvgView extends View{
+public class View_EinnahmenAvg extends View{
 	Double view;
 	
 	public Double getView() {

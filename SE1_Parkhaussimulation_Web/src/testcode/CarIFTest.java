@@ -7,11 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import produktionscode.Car;
-import produktionscode.CarIF;
+import produktionscode.IF_Car;
 
 class CarIFTest {
 	
-	CarIF a;
+	IF_Car a;
 	
 	@BeforeEach
 	void setup() {

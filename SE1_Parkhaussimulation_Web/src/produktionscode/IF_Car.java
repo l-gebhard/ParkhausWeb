@@ -1,5 +1,5 @@
 package produktionscode;
-public interface CarIF {
+public interface IF_Car {
 	String getArt();
 	String getID();
 }

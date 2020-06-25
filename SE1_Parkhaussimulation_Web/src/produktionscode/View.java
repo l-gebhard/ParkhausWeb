@@ -2,9 +2,9 @@ package produktionscode;
 
 public abstract class View {
 
-		Parkhaus model;
+		Statistik model;
 		
-		public void subscribe(Parkhaus model) {
+		public void subscribe(Statistik model) {
 			this.model = model;
 			model.addView(this);
 			update();

@@ -1,6 +1,6 @@
 package produktionscode;
 
-public class Car implements CarIF{
+public class Car implements IF_Car{
 	
 	String id;
 	String art;

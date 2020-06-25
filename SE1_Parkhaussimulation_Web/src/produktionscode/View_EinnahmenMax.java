@@ -1,6 +1,6 @@
 package produktionscode;
 
-public class BesucherAnzahlView extends View{
+public class View_EinnahmenMax extends View{
 	Double view;
 	
 	public Double getView() {
@@ -9,6 +9,6 @@ public class BesucherAnzahlView extends View{
 	
 	@Override
 	public void update() {	
-		view = model.getState().get(3);
+		view = model.getState().get(6);
 	}
 }
