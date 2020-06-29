@@ -4,13 +4,17 @@ public interface IF_Parkhaus {
 
 	Car[] cars();
 
-	void add(Car c);
+	int add(Car car);
 
-	Car remove(String ID);
+	Car remove(Car car);
 
 	int size();
 
 	Statistik getStatistik();
 	
-	public void undo();
+	public void setParkplatzBelegt(int parkplatz, boolean belegt);
+	
+	public void setMaxParkplaetze(int maxParkplaetze);
+	
+	public int getMaxParkplaetze();
 }

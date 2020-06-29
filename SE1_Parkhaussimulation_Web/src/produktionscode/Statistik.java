@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
-public class Statistik extends AbstractPublisher {
+public class Statistik extends AbstractPublisher{
 
 	private List<Double> einnahmenList;
 	private List<Double> parkdauerList;

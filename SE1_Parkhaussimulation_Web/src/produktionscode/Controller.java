@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Controller {
 
-	private IF_Parkhaus p = new Parkhaus("0", new ArrayList<Car>(),
+	private IF_Parkhaus p = new Parkhaus("0",9, new ArrayList<Car>(),
 			new Statistik(new ArrayList<Double>(), new ArrayList<Double>()));
 
 	public String doGet(String cmd, String param, HttpServletResponse response)
@@ -23,12 +23,6 @@ public class Controller {
 		Statistik s = p.getStatistik();
 		
 		switch (param) {
-		
-		case ("UNDO"):{
-			UndoCommand undo = new UndoCommand(p);
-			undo.exec();
-			return ("UNDO Erfolgreich");
-		}
 		
 		case ("Gesamteinnahmen"): {
 			return ("Gesamteinnahmen: " + formatToEuro.format(s.getGesamtEinnahmen()) + " Euro");
@@ -104,25 +98,29 @@ public class Controller {
 
 	}
 
-	public void doPost(String event, String[] params) {
+	public String doPost(String event, String[] params) {
 
 		switch (event) {
-
-		case ("occupied"):{
-			p.undo();
-			break;
-		}
 		
 		case ("enter"): {
-			p.add(new Car(params[1], params[8]));
-			break;
+			return String.valueOf(p.add(new Car(params[1], params[8])));
 		}
 
 		case ("leave"): {
 			String priceString = params[4];
 			float dauer = Float.parseFloat(params[3]);
-			Car c = p.remove(params[1]);
+			Car[] cars = p.cars();
+			Car tmp = null;
+			for(Car i : cars) {
+				if(i.getID().equals(params[1])) {
+					tmp = i;
+				}
+			}
+			Car c = null;
 			
+			if(tmp != null) {
+				c = p.remove(tmp);
+			}
 			
 			if (c != null && !"_".equals(priceString)) {
 				float price = Float.parseFloat(priceString);
@@ -136,5 +134,8 @@ public class Controller {
 			System.out.println("Event im Post nicht gefunden " + event);
 
 		}
+		
+		//Default return;
+		return null;
 	}
 }

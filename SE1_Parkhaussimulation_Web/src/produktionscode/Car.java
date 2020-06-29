@@ -2,8 +2,9 @@ package produktionscode;
 
 public class Car implements IF_Car{
 	
-	String id;
-	String art;
+	private String id;
+	private String art;
+	private int parkplatz;
 	
 	public Car(String id, String art) {
 		this.id = id;
@@ -21,6 +22,14 @@ public class Car implements IF_Car{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	public void setParkplatz(int parkplatz) {
+		this.parkplatz = parkplatz;
+	}
+	
+	public int getParkplatz() {
+		return parkplatz;
 	}
 	
 }

@@ -19,7 +19,7 @@ class ParkhausIFTest {
 	
 	@BeforeEach
 	void setup() {
-		p = new Parkhaus("0", new ArrayList<Car>(),
+		p = new Parkhaus("0", 10 ,new ArrayList<Car>(),
 				new Statistik(new ArrayList<Double>(), new ArrayList<Double>()));
 		
 	}
@@ -28,8 +28,9 @@ class ParkhausIFTest {
 	@DisplayName("Autos werden korrekt hinzugefuegt")
 	void addtest() {
 		Car a = new Car("a" , "any");
-		p.add(a);
+		assertEquals(1, p.add(a));
 		assertSame(a , p.cars()[0]);
+		assertEquals(2, p.add(a));
 		
 	}
 	
@@ -37,8 +38,9 @@ class ParkhausIFTest {
 	@DisplayName("Autos werden korrekt entfernt")
 	void removetest() {
 		Car a = new Car("a" , "any");
-		p.add(a);
-		assertSame(a, p.remove("a"));
+		assertEquals(1, p.add(a));
+		assertSame(a, p.remove(a));
+		assertEquals(1, p.add(new Car("1", "any")));
 		
 	}
 	
@@ -67,6 +69,13 @@ class ParkhausIFTest {
 		
 		assertArrayEquals(carArray, p.cars());
 		
+		
+	}
+	
+	@Test
+	@DisplayName("Die richtige maximale Parkplatzkapazitaet wird ausgegeben")
+	void maxParkplaetzeTest() {
+		assertEquals(10, p.getMaxParkplaetze());
 		
 	}
 	

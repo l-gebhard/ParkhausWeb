@@ -7,21 +7,17 @@ import org.junit.jupiter.api.Test;
 
 import produktionscode.*;
 
-class ControllerTest {
-	
+class FarhzeugtpTest {
+
 	Controller c;
 	
 	@BeforeEach
 	void setup() {
-		
 		c = new Controller();
-		
 	}
-	
-	
 	@Test
 	void test() {
-		fail();
+		fail("Not yet implemented");
 	}
 
 }

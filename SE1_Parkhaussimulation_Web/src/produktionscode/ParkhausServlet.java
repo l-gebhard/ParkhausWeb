@@ -51,10 +51,20 @@ public class ParkhausServlet extends HttpServlet {
 		String event = params[0];
 		Controller c = getPersistentController();
 		
-		c.doPost(event, params);
-
+		String ausgabe = c.doPost(event, params);
+		
+		if(event.equals("enter")) {
+			if(Integer.parseInt(ausgabe) == 0) {
+				PrintWriter out = response.getWriter();
+				out.println(-1);
+			} else {
+				PrintWriter out = response.getWriter();
+				out.println(Integer.parseInt(ausgabe));
+				System.out.println("Post ausgabe: " + ausgabe);
+			}
+		}	
 		setPersistentController(c);
-
+		
 	}
 
 	private static String getBody(HttpServletRequest request) throws IOException {
